@@ -6,7 +6,7 @@ public class Ball {
         rectangle = new Rectangle(x,y,25,25);
     }
     public void draw() {
-        dbImage = createImage(getWidth(), getHeight());
+        /*dbImage = createImage(getWidth(), getHeight());
         dbg = dbImage.getGraphics();
         dbg.setColor(Color.WHITE);
         dbg.drawRect(0,0,600,600);
@@ -16,6 +16,7 @@ public class Ball {
 
 
         getGraphics().drawImage(dbImage, 0, 0, this);
+        */
     }
 
 }

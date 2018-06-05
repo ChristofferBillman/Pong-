@@ -3,10 +3,8 @@ Created by Chrstoffer Billman on 2018-05-14.
  */
 
 /*
-    TODO: Graphics and Draw() method.
-    TODO: Make .swing windows and canvas. Define variables associated with it.
-    TODO: Create a clock, a method that runs every 60th of a second. (16 + 2/3)s.
     TODO: Create evenlisteners and method that alter paddlePos and paddle2Pos when user input.
+    TODO: Translate ball function logic into a ball that draws on the canvas.
  */
 
 import javax.swing.*;
@@ -44,9 +42,7 @@ public class Pong extends JFrame {
         update();
     }
 
-    public static void main(String[] args) {
-        new Pong();
-    }
+    public static void main(String[] args) { new Pong(); }
 
     public void update() {
         while (true) {
@@ -60,7 +56,7 @@ public class Pong extends JFrame {
     }
 
     public void running() {
-        // what to run every ...
+        // what to run every long fps
         draw();
         ball();
     }
@@ -69,7 +65,7 @@ public class Pong extends JFrame {
     int b = 0;
     private int x = width/2;
     private int y = heigth/2;
-    Ball ball = new Ball(x,y);
+    //Ball ball = new Ball(x,y);
     public void draw() {
         dbImage = createImage(getWidth(), getHeight());
         dbg = dbImage.getGraphics();
@@ -77,38 +73,34 @@ public class Pong extends JFrame {
         dbg.drawRect(0,0,600,600);
 
         dbg.setColor(Color.RED);
-
-
-
+        int[] coord = ball();
+        dbg.fillOval(coord[0],coord[1],10,10);
+        System.out.println(coord[0]+ "," + coord[1]);
         getGraphics().drawImage(dbImage, 0, 0, this);
     }
 
     // Ball method; updates the ball position and keeps the ball moving. Intended use is inside setInterval-like method.
     // Includes all collision detection.
-
-    public void ball() {
+    int Δy = 2; // Velocity of ball. Unit of length per 60th second. l/(s/60)
+    int Δx = 2; // Velocity of ball. Unit of length per 60th second. l/(s/60)
+    public int[] ball() {
         int canvasWidth = width;
         int canvasHeight = heigth;
 
         // Collision detection x-axis.
-        int Δx = 10; // Velocity of ball. Unit of length per 60th second. l/(s/60)
-        if (x == canvasWidth) {
-            x = x - Δx;
+        if (x == canvasWidth || x == 0) {
+            Δx = Δx *-1;
             p1score++; // Score for p1!
-        }
-        if (x == 0) {
-            x = x + Δx;
-            p2score++; // Score for p2!
         }
 
         //Collision detection y-axis.
-        int Δy = 10; // Velocity of ball. Unit of length per 60th second. l/(s/60)
-        if (y == canvasHeight) {
-            y = y - Δy;
+        if (y == canvasHeight || y == 0 ) {
+            Δy = Δy *-1;
+            p2score++;
         }
-        if (y == 0) {
-            y = y + Δy;
-        }
+
+        x += Δx;
+        y += Δy;
 
         // Collision detection paddles.
         int paddlePos = heigth/2; // y-coordinates of the first paddle.
@@ -120,8 +112,10 @@ public class Pong extends JFrame {
             x = x + Δx;
         }
         if (x == l2 && y == paddle2Pos) {
-            x = x - Δx;
+            Δx = Δx *-1;
         }
+        int[] coords = new int[]{x,y};
+        return coords;
     }
 }
 
